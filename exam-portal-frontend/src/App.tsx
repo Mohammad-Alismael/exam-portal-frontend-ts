@@ -15,17 +15,33 @@ function App() {
       <Route path="/" element={<Layout />}>
         {/* public routes */}
         <Route index element={<Public />} />
-        <Route path="login" element={
-          <>
-          <LandingHeader type='auth'/>
-          <AuthForm mode='auth'/>
-          </>
-        
-        } />
-        <Route path="signup" element={<>
-          <LandingHeader type='signup'/>
-          <AuthForm mode="signup"/>
-          </>} />
+        <Route
+          path="login"
+          element={
+            <>
+              <LandingHeader type="auth" />
+              <AuthForm mode="auth" />
+            </>
+          }
+        />
+        <Route
+          path="signup"
+          element={
+            <>
+              <LandingHeader type="signup" />
+              <AuthForm mode="signup" />
+            </>
+          }
+        />
+        <Route
+          path="forgotPassword"
+          element={
+            <>
+              <LandingHeader type="auth" />
+              <AuthForm mode="signup" />
+            </>
+          }
+        />
 
         {/* protected routes */}
         <Route element={<RequireAuth />}>
@@ -33,7 +49,6 @@ function App() {
             <Route index element={<Welcome />} />
             <Route path="courses" element={<CoursesList />} />
           </Route>
-
         </Route>
       </Route>
     </Routes>

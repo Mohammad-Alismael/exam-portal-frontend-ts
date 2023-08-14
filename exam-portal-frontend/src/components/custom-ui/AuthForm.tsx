@@ -3,6 +3,8 @@ import { useNavigate } from "react-router-dom";
 
 import { useDispatch } from "react-redux";
 import { setCredentials } from "@/features/auth/authSlice";
+import { Link } from "react-router-dom";
+
 import { useLoginMutation } from "@/features/auth/authApiSlice.ts";
 import { Button } from "@/components/ui/button";
 import {
@@ -19,6 +21,15 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { useForm } from "react-hook-form";
 type FormValues = {
@@ -82,6 +93,52 @@ const AuthForm: React.FC = ({ mode }) => {
   const onSubmit = (data: FormValues) => console.log(data);
 
   return (
+    <div className="bg-transparent flex justify-center items-center h-screen">
+    <Card className="w-[350px]  bg-white rounded text-black">
+      <CardHeader>
+        <CardTitle className="capitalize">{mode === "auth" ? "login" : "sign up"}</CardTitle>
+      </CardHeader>
+      <CardContent>
+      <Form {...form}>
+        <form onSubmit={form.handleSubmit(onSubmit)}>
+          <div className="grid w-full items-center gap-4">
+            <div className="flex flex-col space-y-1.5 text-black">
+              <Label htmlFor="name">Username</Label>
+              <Input id="name" className="rounded" placeholder="username" />
+            </div>
+            <div className="flex flex-col space-y-1.5">
+              <Label htmlFor="framework">Framework</Label>
+              <Select>
+                <SelectTrigger id="framework" className="rounded">
+                  <SelectValue placeholder="Select" />
+                </SelectTrigger>
+                <SelectContent position="popper" className="bg-white text-black rounded">
+                  <SelectItem value="next">Next.js</SelectItem>
+                  <SelectItem value="sveltekit">SvelteKit</SelectItem>
+                  <SelectItem value="astro">Astro</SelectItem>
+                  <SelectItem value="nuxt">Nuxt.js</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+          </div>
+        </form>
+        </Form>
+      </CardContent>
+      <CardFooter className="flex justify-between">
+      {mode === 'auth' ? <Link
+          className="text-black underline"
+          to="/forgotPassword"
+          replace
+        >
+          forgot Password?
+        </Link> : null }
+        <Button className="bg-yellow-400 text-black rounded-xl float-right">submit</Button>
+      </CardFooter>
+    </Card>
+    </div>
+  )
+
+  return (
     <>
       <div className="bg-transparent flex justify-center items-center h-screen">
         <Form {...form}>
@@ -109,7 +166,7 @@ const AuthForm: React.FC = ({ mode }) => {
               name="password"
               render={({ field }) => (
                 <FormItem className="text-black">
-                  <FormLabel>password</FormLabel>
+                  <FormLabel>Password</FormLabel>
                   <FormControl>
                     <Input placeholder="password" {...field} />
                   </FormControl>
@@ -118,7 +175,7 @@ const AuthForm: React.FC = ({ mode }) => {
             />
             {mode === "signup" ? (
               <>
-                <FormLabel className="text-black">user type</FormLabel>
+                <FormLabel className="text-black capitalize">user type</FormLabel>
                 <Select>
                   <SelectTrigger className="w-full text-black bg-white">
                     <SelectValue placeholder="user type" />
