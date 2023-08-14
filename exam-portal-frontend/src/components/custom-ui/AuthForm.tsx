@@ -94,49 +94,85 @@ const AuthForm: React.FC = ({ mode }) => {
 
   return (
     <div className="bg-transparent flex justify-center items-center h-screen">
-    <Card className="w-[350px]  bg-white rounded text-black">
-      <CardHeader>
-        <CardTitle className="capitalize">{mode === "auth" ? "login" : "sign up"}</CardTitle>
-      </CardHeader>
-      <CardContent>
-      <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)}>
-          <div className="grid w-full items-center gap-4">
-            <div className="flex flex-col space-y-1.5 text-black">
-              <Label htmlFor="name">Username</Label>
-              <Input id="name" className="rounded" placeholder="username" />
-            </div>
-            <div className="flex flex-col space-y-1.5">
-              <Label htmlFor="framework">Framework</Label>
-              <Select>
-                <SelectTrigger id="framework" className="rounded">
-                  <SelectValue placeholder="Select" />
-                </SelectTrigger>
-                <SelectContent position="popper" className="bg-white text-black rounded">
-                  <SelectItem value="next">Next.js</SelectItem>
-                  <SelectItem value="sveltekit">SvelteKit</SelectItem>
-                  <SelectItem value="astro">Astro</SelectItem>
-                  <SelectItem value="nuxt">Nuxt.js</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-          </div>
-        </form>
-        </Form>
-      </CardContent>
-      <CardFooter className="flex justify-between">
-      {mode === 'auth' ? <Link
-          className="text-black underline"
-          to="/forgotPassword"
-          replace
-        >
-          forgot Password?
-        </Link> : null }
-        <Button className="bg-yellow-400 text-black rounded-xl float-right">submit</Button>
-      </CardFooter>
-    </Card>
+      <Card className="w-[350px]  bg-white rounded text-black">
+        <CardHeader>
+          <CardTitle className="capitalize">
+            {mode === "auth" ? "login" : "sign up"}
+          </CardTitle>
+        </CardHeader>
+        <CardContent>
+          <Form {...form}>
+            <form onSubmit={form.handleSubmit(onSubmit)}>
+              <div className="grid w-full items-center gap-4">
+                {mode !== "forget-password" ? (
+                  <div className="flex flex-col space-y-1.5 text-black">
+                    <Label htmlFor="name">Username</Label>
+                    <Input
+                      id="name"
+                      className="rounded"
+                      placeholder="username"
+                    />
+                  </div>
+                ) : null}
+                {mode === "signup" || mode === "forget-password" ? (
+                  <div className="flex flex-col space-y-1.5 text-black">
+                    <Label htmlFor="name">Email</Label>
+                    <Input
+                      id="name"
+                      className="rounded"
+                      placeholder="example@gmail.com"
+                    />
+                  </div>
+                ) : null}
+                {mode !== "forget-password" ? (
+                  <div className="flex flex-col space-y-1.5 text-black">
+                    <Label htmlFor="name">Password</Label>
+                    <Input
+                      id="name"
+                      className="rounded"
+                      placeholder="password"
+                    />
+                  </div>
+                ) : null}
+                {mode === "signup" ? (
+                  <div className="flex flex-col space-y-1.5">
+                    <Label htmlFor="framework">User Type</Label>
+                    <Select>
+                      <SelectTrigger id="framework" className="rounded">
+                        <SelectValue placeholder="Select" />
+                      </SelectTrigger>
+                      <SelectContent
+                        position="popper"
+                        className="bg-white text-black rounded"
+                      >
+                        <SelectItem value="next">Next.js</SelectItem>
+                        <SelectItem value="sveltekit">SvelteKit</SelectItem>
+                        <SelectItem value="astro">Astro</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                ) : null}
+              </div>
+            </form>
+          </Form>
+        </CardContent>
+        <CardFooter className="flex justify-between">
+          {mode === "auth" ? (
+            <Link className="text-black underline" to="/forgotPassword" replace>
+              forgot Password?
+            </Link>
+          ) : null}
+          <Button
+            className={`bg-yellow-400 text-black rounded capitalize ${
+              mode !== "auth" ? "w-full" : ""
+            }`}
+          >
+            submit
+          </Button>
+        </CardFooter>
+      </Card>
     </div>
-  )
+  );
 
   return (
     <>
@@ -175,7 +211,9 @@ const AuthForm: React.FC = ({ mode }) => {
             />
             {mode === "signup" ? (
               <>
-                <FormLabel className="text-black capitalize">user type</FormLabel>
+                <FormLabel className="text-black capitalize">
+                  user type
+                </FormLabel>
                 <Select>
                   <SelectTrigger className="w-full text-black bg-white">
                     <SelectValue placeholder="user type" />

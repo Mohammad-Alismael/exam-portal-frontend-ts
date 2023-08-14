@@ -38,7 +38,7 @@ function App() {
           element={
             <>
               <LandingHeader type="auth" />
-              <AuthForm mode="signup" />
+              <AuthForm mode="forget-password" />
             </>
           }
         />
