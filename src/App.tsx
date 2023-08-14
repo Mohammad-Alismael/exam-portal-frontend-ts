@@ -8,8 +8,17 @@ import Public from "./components/Public.tsx";
 import CoursesList from "./features/courses/CoursesList.tsx";
 import Layout2 from "./components/Layout2.tsx";
 import LandingHeader from "@/components/custom-ui/LandingHeader.tsx";
-
+import "react-toastify/dist/ReactToastify.css";
+import { useEffect } from "react";
+import { useSelector } from "react-redux";
+import { selectCurrentToken } from "./features/auth/authSlice";
+import PersistLogin from "./features/auth/PersistLogin";
 function App() {
+  const token = useSelector(selectCurrentToken) as string;
+
+  useEffect(() => {
+    console.log("dam2! this is from app.tsx");
+  }, []);
   return (
     <Routes>
       <Route path="/" element={<Layout />}>
@@ -44,10 +53,12 @@ function App() {
         />
 
         {/* protected routes */}
-        <Route element={<RequireAuth />}>
-          <Route path="/welcome" element={<Layout2 />}>
-            <Route index element={<Welcome />} />
-            <Route path="courses" element={<CoursesList />} />
+        <Route element={<PersistLogin />}>
+          <Route element={<RequireAuth />}>
+            <Route path="/dashboard" element={<Layout2 />}>
+              <Route index element={<Welcome />} />
+              <Route path="courses" element={<CoursesList />} />
+            </Route>
           </Route>
         </Route>
       </Route>

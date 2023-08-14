@@ -22,7 +22,7 @@ const CoursesList = () => {
             return <li key={i}>{course?.class_name}</li>;
           })}
         </ul>
-        <Link to="/welcome">Back to Welcome</Link>
+        <Link to="/dashboard">Back to Welcome</Link>
       </section>
     );
   } else if (isError) {

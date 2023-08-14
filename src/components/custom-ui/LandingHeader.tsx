@@ -6,11 +6,11 @@ type PropTypes = {
 function LandingHeader(props: PropTypes) {
   return (
     <div className="flex justify-between items-center bg-white px-5 absolute top-0 left-0 right-0">
-      <div className="flex justify-center items-center gap-5">
-        <img className="w-[75px]" src={logo} alt="ExamInstructor Portal" />
-        <h1 className="text-4xl capitalize text-black font-bold">
-          exam portal
-        </h1>
+      <div className="flex justify-center items-center gap-1 md:gap-5">
+        <img className="w-1/4 max-w-[75px]" src={logo} alt="ExamInstructor Portal" />
+          <h1 className="text-xl md:text-4xl capitalize text-black font-bold">
+              exam portal
+          </h1>
       </div>
       <div>
         <Link

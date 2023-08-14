@@ -1,12 +1,17 @@
 import { useLocation, Navigate, Outlet } from "react-router-dom";
-import { useSelector } from "react-redux";
-import { selectCurrentToken } from "./authSlice";
-import React from "react";
+import {useDispatch, useSelector} from "react-redux";
+import {selectCurrentToken, setCredentials} from "./authSlice";
+import React, {useEffect, useState} from "react";
+import {useRefreshMutation} from "./authApiSlice";
+import {toast} from "react-toastify";
+import jwt_decode from "jwt-decode";
 
 const RequireAuth: React.FC = () => {
     const token = useSelector(selectCurrentToken) as string;
     const location = useLocation();
-
+    useEffect(()=> {
+        console.log('this is from RequireAuth.tsx')
+    })
     if (token) {
         return <Outlet />;
     } else {
