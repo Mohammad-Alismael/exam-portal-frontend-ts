@@ -47,7 +47,16 @@ function App() {
           element={
             <>
               <LandingHeader type="auth" />
-              <AuthForm mode="forget-password" />
+              <AuthForm mode="forgot" />
+            </>
+          }
+        />
+          <Route
+          path="resetPassword/:resetToken"
+          element={
+            <>
+              <LandingHeader type="auth" />
+              <AuthForm mode="reset" />
             </>
           }
         />

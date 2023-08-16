@@ -1,16 +1,20 @@
-import React, { useRef, useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 
 import { useDispatch } from "react-redux";
 import { setCredentials } from "@/features/auth/authSlice";
 import { Link } from "react-router-dom";
 
-import { useLoginMutation } from "@/features/auth/authApiSlice.ts";
+import {
+  useForgotPasswordMutation,
+  useLoginMutation,
+  useResetPasswordMutation,
+  useSignupMutation,
+} from "@/features/auth/authApiSlice.ts";
 import { Button } from "@/components/ui/button";
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -25,22 +29,30 @@ import {
 } from "@/components/ui/select";
 import { Input } from "@/components/ui/input";
 import { useForm } from "react-hook-form";
-import {  toast } from 'react-toastify';
-import { ReloadIcon } from "@radix-ui/react-icons"
-
+import { toast } from "react-toastify";
+import { ReloadIcon } from "@radix-ui/react-icons";
+import { getUserRoleIdFromSelect } from "../../lib/utils";
+type PropTypes = {
+  mode: "auth" | "signup" | "forgot" | "reset";
+};
 
 type FormValues = {
   username: string;
   email: string;
   password: string;
-  userType: number;
+  userType: string;
 };
-const AuthForm: React.FC = ({ mode }) => {
+const AuthForm: React.FC = ({ mode }: PropTypes) => {
+  const { resetToken } = useParams();
   const [user, setUser] = useState<string>("");
-  const [pwd, setPwd] = useState<string>("");
   const navigate = useNavigate();
 
-  const [login, { isLoading }] = useLoginMutation();
+  const [login, { isLoading: isLoadingLogin }] = useLoginMutation();
+  const [signup, { isLoading: isLoadingSignup }] = useSignupMutation();
+  const [forgotPassword, { isLoading: isLoadingForgotPassword }] =
+    useForgotPasswordMutation();
+  const [resetPassword, { isLoading: isLoadingResetPassword }] =
+    useResetPasswordMutation();
   const dispatch = useDispatch();
 
   const form = useForm<FormValues>({
@@ -48,56 +60,125 @@ const AuthForm: React.FC = ({ mode }) => {
       username: "",
       email: "",
       password: "",
-      userType: 0,
+      userType: "",
     },
     mode: "onChange",
   });
-  const onSubmit = async (data: FormValues) => {
-
-
+  const onSubmitLogin = async (data: FormValues) => {
     try {
-      const userData = await login({username: data.username, password: data.password}).unwrap();
-      console.log('userData', userData);
-      console.log('user', user);
-      dispatch(setCredentials({...userData, user}));
-      form.reset()
+      const userData = await login({
+        username: data.username,
+        password: data.password,
+      }).unwrap();
+      console.log("userData", userData);
+      console.log("user", user);
+      dispatch(setCredentials({ ...userData, user }));
+      form.reset();
       navigate("/dashboard");
     } catch (err) {
-      toast.error(err?.data?.message)
+      toast.error(err?.data?.message);
+    }
+  };
+  const onSubmitSignup = async (data: FormValues) => {
+    try {
+      // { username, password, email_id, role_id }
+      const { username, email, password, userType } = data;
+      const res = await signup({
+        username,
+        password,
+        email_id: email,
+        role_id: getUserRoleIdFromSelect(userType),
+      }).unwrap();
+      console.log("res", res);
+      toast.info(res?.data?.message);
+      form.reset();
+      navigate("/login");
+    } catch (err) {
+      toast.error(err?.data?.message);
+    }
+  };
+  const onSubmitForgot = async (data: FormValues) => {
+    try {
+      // {  email_id }
+      const { email } = data;
+      const res = await forgotPassword({
+        email_id: email,
+      }).unwrap();
+      console.log("res", res);
+      toast.info(res?.data?.message);
+      form.reset();
+      navigate("/login");
+    } catch (err) {
+      toast.error(err?.data?.message);
+    }
+  };
+  const onSubmitReset = async (data: FormValues) => {
+    try {
+      // { reset_token, new_password }
+      const { password } = data;
+      const res = await resetPassword({
+        reset_token: resetToken,
+        new_password: password,
+      }).unwrap();
+      console.log("res", res);
+      toast.info(res?.data?.message);
+      form.reset();
+      navigate("/login");
+    } catch (err) {
+      toast.error(err?.data?.message);
     }
   };
 
+  const onSubmit = () => {
+    switch (mode) {
+      case "auth":
+        return onSubmitLogin;
+      case "signup":
+        return onSubmitSignup;
+      case "forgot":
+        return onSubmitForgot;
+      case "reset":
+        return onSubmitReset;
+    }
+  };
+  const isSpinnerLoading =
+    isLoadingLogin ||
+    isLoadingSignup ||
+    isLoadingResetPassword ||
+    isLoadingForgotPassword;
   return (
     <div className="bg-transparent flex justify-center items-center h-screen">
       <Form {...form}>
         <form
-          onSubmit={form.handleSubmit(onSubmit)}
+          onSubmit={form.handleSubmit(onSubmit())}
           className="lg:w-1/4 w-[300px] bg-white rounded p-5 space-y-4"
         >
           <h1 className="text-black capitalize font-bold text-2xl">
             {mode === "auth" && "login"}
             {mode === "signup" && "sign up"}
-            {mode === "forget-password" && "forget password"}
+            {mode === "forgot" && "forget password"}
+            {mode === "reset" && "reset password"}
           </h1>
-          {mode !== "forget-password" && (
-            <FormField
-              control={form.control}
-              name="username"
-              render={({ field }) => (
-                <FormItem className="text-black">
-                  <FormLabel>Username</FormLabel>
-                  <FormControl>
-                    <Input
-                      className="rounded"
-                      placeholder="username"
-                      {...field}
-                    />
-                  </FormControl>
-                </FormItem>
-              )}
-            />
-          )}
-          {(mode === "signup" || mode === "forget-password") && (
+          {mode === "auth" ||
+            (mode === "signup" && (
+              <FormField
+                control={form.control}
+                name="username"
+                render={({ field }) => (
+                  <FormItem className="text-black">
+                    <FormLabel>Username</FormLabel>
+                    <FormControl>
+                      <Input
+                        className="rounded"
+                        placeholder="username"
+                        {...field}
+                      />
+                    </FormControl>
+                  </FormItem>
+                )}
+              />
+            ))}
+          {(mode === "signup" || mode === "forgot") && (
             <FormField
               control={form.control}
               name="email"
@@ -115,16 +196,18 @@ const AuthForm: React.FC = ({ mode }) => {
               )}
             />
           )}
-          {mode !== "forget-password" && (
+          {mode !== "forgot" && (
             <FormField
               control={form.control}
               name="password"
               render={({ field }) => (
                 <FormItem className="text-black">
-                  <FormLabel>Password</FormLabel>
+                  <FormLabel>
+                    {mode === "reset" ? "New password" : "Password"}
+                  </FormLabel>
                   <FormControl>
                     <Input
-                        type='password'
+                      type="password"
                       className="rounded"
                       placeholder="password"
                       {...field}
@@ -147,7 +230,7 @@ const AuthForm: React.FC = ({ mode }) => {
                   >
                     <FormControl className="rounded">
                       <SelectTrigger>
-                        <SelectValue placeholder="Select user type" />
+                        <SelectValue placeholder="Select a fruit" />
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent className="bg-white text-black rounded">
@@ -178,9 +261,13 @@ const AuthForm: React.FC = ({ mode }) => {
               className={`bg-yellow-400 text-black rounded capitalize hover:bg-yellow-200 ${
                 mode !== "auth" ? "w-full" : ""
               }`}
-              disabled={isLoading}
+              disabled={isSpinnerLoading}
             >
-              { isLoading ? <ReloadIcon className="mr-2 h-4 w-4 animate-spin" /> : 'Submit'}
+              {isSpinnerLoading ? (
+                <ReloadIcon className="mr-2 h-4 w-4 animate-spin" />
+              ) : (
+                "Submit"
+              )}
             </Button>
           </div>
         </form>
