@@ -9,6 +9,27 @@ export const authApiSlice = apiSlice.injectEndpoints({
         body: { ...credentials },
       }),
     }),
+    signup: builder.mutation({
+      query: (credentials) => ({
+        url: "/users/create",
+        method: "POST",
+        body: { ...credentials },
+      }),
+    }),
+    forgotPassword: builder.mutation({
+      query: (credentials) => ({
+        url: "/users/password/forgot",
+        method: "POST",
+        body: { ...credentials }, // {email_id}
+      }),
+    }),
+    resetPassword: builder.mutation({
+      query: (credentials) => ({
+        url: "/users/password/reset",
+        method: "POST",
+        body: { ...credentials }, // { reset_token, new_password }
+      }),
+    }),
     refresh: builder.mutation({
       query: () => ({
         url: "/users/refresh",
