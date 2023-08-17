@@ -4,7 +4,7 @@ import { defineConfig } from "vite"
 import pluginRewriteAll from 'vite-plugin-rewrite-all';
 
 export default defineConfig({
-  plugins: [pluginRewriteAll()],
+  plugins: [react(),pluginRewriteAll()],
   test: {
     environment: 'happy-dom'
   },

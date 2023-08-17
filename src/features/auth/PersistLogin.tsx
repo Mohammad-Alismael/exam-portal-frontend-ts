@@ -5,6 +5,7 @@ import React, { useEffect, useState } from "react";
 import { useRefreshMutation } from "./authApiSlice";
 import { toast } from "react-toastify";
 import jwt_decode from "jwt-decode";
+import LoadingSpinner from "../../components/custom-ui/LoadingSpinner";
 
 const PersistLogin: React.FC = () => {
   const token = useSelector(selectCurrentToken) as string;
@@ -38,7 +39,7 @@ const PersistLogin: React.FC = () => {
       {token ? (
         <Outlet />
       ) : isLoading_ ? (
-        <p className="text-white">Loading...</p>
+        <LoadingSpinner />
       ) : (
         <Outlet />
       )}

@@ -3,7 +3,7 @@ import { Route, Routes } from "react-router-dom";
 import Layout from "./components/Layout.tsx";
 import AuthForm from "./components/custom-ui/AuthForm.tsx";
 import RequireAuth from "./features/auth/RequireAuth.tsx";
-import Welcome from "./features/auth/Welcome.tsx";
+import Dashboard from "./features/auth/Dashboard.tsx";
 import Public from "./components/Public.tsx";
 import CoursesList from "./features/courses/CoursesList.tsx";
 import Layout2 from "./components/Layout2.tsx";
@@ -69,7 +69,7 @@ function App() {
         <Route element={<PersistLogin />}>
           <Route element={<RequireAuth />}>
             <Route path="/dashboard" element={<Layout2 />}>
-              <Route index element={<Welcome />} />
+              <Route index element={<Dashboard />} />
               <Route path="courses" element={<CoursesList />} />
             </Route>
           </Route>

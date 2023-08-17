@@ -153,7 +153,7 @@ const AuthForm: React.FC = ({ mode }: PropTypes) => {
           onSubmit={form.handleSubmit(onSubmit())}
           className="lg:w-1/4 w-[300px] bg-white rounded p-5 space-y-4"
         >
-          <h1 className="text-black capitalize font-bold text-2xl">
+          <h1 data-testid='form-header' className="text-black capitalize font-bold text-2xl">
             {mode === "auth" && "login"}
             {mode === "signup" && "sign up"}
             {mode === "forgot" && "forget password"}
