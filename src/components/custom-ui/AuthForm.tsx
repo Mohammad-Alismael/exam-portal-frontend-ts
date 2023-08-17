@@ -1,8 +1,8 @@
-import React, { useState } from "react";
+import  { useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 
 import { useDispatch } from "react-redux";
-import { setCredentials } from "@/features/auth/authSlice";
+import { setCredentials } from "../../features/auth/authSlice";
 import { Link } from "react-router-dom";
 
 import {
@@ -10,8 +10,8 @@ import {
   useLoginMutation,
   useResetPasswordMutation,
   useSignupMutation,
-} from "@/features/auth/authApiSlice.ts";
-import { Button } from "@/components/ui/button";
+} from "../../features/auth/authApiSlice";
+import { Button } from "../ui/button";
 import {
   Form,
   FormControl,
@@ -19,15 +19,15 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/components/ui/form";
+} from "../ui/form";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
-import { Input } from "@/components/ui/input";
+} from "../ui/select";
+import { Input } from "../ui/input";
 import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
 import { ReloadIcon } from "@radix-ui/react-icons";

@@ -3,7 +3,8 @@ import { Link } from "react-router-dom";
 type PropTypes = {
   type: string;
 };
-function LandingHeader(props: PropTypes) {
+// import {JSX} from 'react'
+function LandingHeader(props: PropTypes): JSX.Element {
   return (
     <div className="flex justify-between items-center bg-white px-5 absolute top-0 left-0 right-0">
       <div className="flex justify-center items-center gap-1 md:gap-5">

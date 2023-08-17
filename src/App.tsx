@@ -14,6 +14,7 @@ import { useSelector } from "react-redux";
 import { selectCurrentToken } from "./features/auth/authSlice";
 import PersistLogin from "./features/auth/PersistLogin";
 import EmailActivation from "./components/custom-ui/EmailActivation";
+import Logout from "./components/custom-ui/Logout";
 function App() {
   const token = useSelector(selectCurrentToken) as string;
 
@@ -52,7 +53,7 @@ function App() {
             </>
           }
         />
-          <Route
+        <Route
           path="resetPassword/:resetToken"
           element={
             <>
@@ -61,12 +62,8 @@ function App() {
             </>
           }
         />
-        <Route
-          path="activation/:emailToken"
-          element={
-              <EmailActivation />
-          }
-        />
+        <Route path="activation/:emailToken" element={<EmailActivation />} />
+        <Route path="logout" element={<Logout />} />
 
         {/* protected routes */}
         <Route element={<PersistLogin />}>
