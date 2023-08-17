@@ -90,7 +90,7 @@ const AuthForm: React.FC = ({ mode }: PropTypes) => {
         role_id: getUserRoleIdFromSelect(userType),
       }).unwrap();
       console.log("res", res);
-      toast.info(res?.data?.message);
+      toast.info(res?.message);
       form.reset();
       navigate("/login");
     } catch (err) {
@@ -105,9 +105,9 @@ const AuthForm: React.FC = ({ mode }: PropTypes) => {
         email_id: email,
       }).unwrap();
       console.log("res", res);
-      toast.info(res?.data?.message);
+      toast.info(res?.message);
       form.reset();
-      navigate("/login");
+      // navigate("/login");
     } catch (err) {
       toast.error(err?.data?.message);
     }
@@ -121,7 +121,7 @@ const AuthForm: React.FC = ({ mode }: PropTypes) => {
         new_password: password,
       }).unwrap();
       console.log("res", res);
-      toast.info(res?.data?.message);
+      toast.info(res?.message);
       form.reset();
       navigate("/login");
     } catch (err) {
@@ -159,8 +159,7 @@ const AuthForm: React.FC = ({ mode }: PropTypes) => {
             {mode === "forgot" && "forget password"}
             {mode === "reset" && "reset password"}
           </h1>
-          {mode === "auth" ||
-            (mode === "signup" && (
+          {(mode === "auth" || mode === "signup") && (
               <FormField
                 control={form.control}
                 name="username"
@@ -177,7 +176,7 @@ const AuthForm: React.FC = ({ mode }: PropTypes) => {
                   </FormItem>
                 )}
               />
-            ))}
+            )}
           {(mode === "signup" || mode === "forgot") && (
             <FormField
               control={form.control}

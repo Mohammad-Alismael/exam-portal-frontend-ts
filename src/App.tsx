@@ -13,6 +13,7 @@ import { useEffect } from "react";
 import { useSelector } from "react-redux";
 import { selectCurrentToken } from "./features/auth/authSlice";
 import PersistLogin from "./features/auth/PersistLogin";
+import EmailActivation from "./components/custom-ui/EmailActivation";
 function App() {
   const token = useSelector(selectCurrentToken) as string;
 
@@ -58,6 +59,12 @@ function App() {
               <LandingHeader type="auth" />
               <AuthForm mode="reset" />
             </>
+          }
+        />
+        <Route
+          path="activation/:emailToken"
+          element={
+              <EmailActivation />
           }
         />
 
