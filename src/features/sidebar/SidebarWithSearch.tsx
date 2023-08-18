@@ -5,12 +5,9 @@ import {
   List,
   ListItem,
   ListItemPrefix,
-  ListItemSuffix,
-  Chip,
   Accordion,
   AccordionHeader,
   AccordionBody,
-  Alert,
   Input,
 } from "@material-tailwind/react";
 import {
@@ -20,28 +17,43 @@ import {
   Cog6ToothIcon,
   InboxIcon,
   PowerIcon,
-} from '@heroicons/react/24/solid';
+} from "@heroicons/react/24/solid";
 import {
   ChevronRightIcon,
   ChevronDownIcon,
   CubeTransparentIcon,
   MagnifyingGlassIcon,
 } from "@heroicons/react/24/outline";
+import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { setSelectedCourseId, setTab } from "./sidebarSlice";
+import { courses, PROFILE, SETTINGS } from "../../lib/consts";
 
 export function SidebarWithSearch() {
   const [open, setOpen] = React.useState(0);
-  const [openAlert, setOpenAlert] = React.useState(true);
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const handleOpen = (value) => {
     setOpen(open === value ? 0 : value);
   };
+  const handleDispatch = (tab: string) => {
+    dispatch(setTab(tab));
+  };
+  const handleCourseId = (courseId: string) => {
+    handleDispatch(courses);
+    dispatch(setSelectedCourseId(courseId));
+  };
 
   return (
     <Card className="rounded-none float-left h-[calc(100vh)] text-black p-4 shadow-xl shadow-blue-gray-900/5">
-      <div className="mb-2 flex items-center gap-4 p-4">
+      <div
+        onClick={() => handleDispatch(null)}
+        className="mb-2 flex items-center gap-4 p-4"
+      >
         <img src="./logo.png" alt="brand" className="h-8 w-8" />
         <Typography variant="h5" color="blue-gray">
-          exam portal
+          Exam Portal
         </Typography>
       </div>
       <div className="p-2">
@@ -64,110 +76,60 @@ export function SidebarWithSearch() {
         >
           <ListItem className="p-0" selected={open === 1}>
             <AccordionHeader
-              onClick={() => handleOpen(1)}
+              onClick={() => {
+                handleOpen(1);
+              }}
               className="border-b-0 p-3"
             >
               <ListItemPrefix>
                 <PresentationChartBarIcon className="h-5 w-5" />
               </ListItemPrefix>
               <Typography color="blue-gray" className="mr-auto font-normal">
-                Dashboard
+                courses
               </Typography>
             </AccordionHeader>
           </ListItem>
           <AccordionBody className="py-1">
             <List className="p-0">
-              <ListItem>
+              <ListItem
+                onClick={() => {
+                  handleCourseId("qw234e");
+                }}
+              >
                 <ListItemPrefix>
                   <ChevronRightIcon strokeWidth={3} className="h-3 w-5" />
                 </ListItemPrefix>
-                Analytics
+                CS101
               </ListItem>
-              <ListItem>
+              <ListItem onClick={() => handleCourseId("df45r")}>
                 <ListItemPrefix>
                   <ChevronRightIcon strokeWidth={3} className="h-3 w-5" />
                 </ListItemPrefix>
-                Reporting
+                CS102
               </ListItem>
-              <ListItem>
+              <ListItem onClick={() => handleCourseId("sg45f6")}>
                 <ListItemPrefix>
                   <ChevronRightIcon strokeWidth={3} className="h-3 w-5" />
                 </ListItemPrefix>
-                Projects
-              </ListItem>
-            </List>
-          </AccordionBody>
-        </Accordion>
-        <Accordion
-          open={open === 2}
-          icon={
-            <ChevronDownIcon
-              strokeWidth={2.5}
-              className={`mx-auto h-4 w-4 transition-transform ${
-                open === 2 ? "rotate-180" : ""
-              }`}
-            />
-          }
-        >
-          <ListItem className="p-0" selected={open === 2}>
-            <AccordionHeader
-              onClick={() => handleOpen(2)}
-              className="border-b-0 p-3"
-            >
-              <ListItemPrefix>
-                <ShoppingBagIcon className="h-5 w-5" />
-              </ListItemPrefix>
-              <Typography color="blue-gray" className="mr-auto font-normal">
-                E-Commerce
-              </Typography>
-            </AccordionHeader>
-          </ListItem>
-          <AccordionBody className="py-1">
-            <List className="p-0">
-              <ListItem>
-                <ListItemPrefix>
-                  <ChevronRightIcon strokeWidth={3} className="h-3 w-5" />
-                </ListItemPrefix>
-                Orders
-              </ListItem>
-              <ListItem>
-                <ListItemPrefix>
-                  <ChevronRightIcon strokeWidth={3} className="h-3 w-5" />
-                </ListItemPrefix>
-                Products
+                CS240
               </ListItem>
             </List>
           </AccordionBody>
         </Accordion>
         <hr className="my-2 border-blue-gray-50" />
-        <ListItem>
-          <ListItemPrefix>
-            <InboxIcon className="h-5 w-5" />
-          </ListItemPrefix>
-          Inbox
-          <ListItemSuffix>
-            <Chip
-              value="14"
-              size="sm"
-              variant="ghost"
-              color="blue-gray"
-              className="rounded-full"
-            />
-          </ListItemSuffix>
-        </ListItem>
-        <ListItem>
+        <ListItem onClick={() => handleDispatch(PROFILE)}>
           <ListItemPrefix>
             <UserCircleIcon className="h-5 w-5" />
           </ListItemPrefix>
           Profile
         </ListItem>
-        <ListItem>
+        <ListItem onClick={() => handleDispatch(SETTINGS)}>
           <ListItemPrefix>
             <Cog6ToothIcon className="h-5 w-5" />
           </ListItemPrefix>
           Settings
         </ListItem>
-        <ListItem>
+        <ListItem onClick={() => navigate("/logout")}>
           <ListItemPrefix>
             <PowerIcon className="h-5 w-5" />
           </ListItemPrefix>

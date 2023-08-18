@@ -5,7 +5,7 @@ const Layout2 = () => {
   return (
     <div className="inline-block w-screen">
       <SidebarWithSearch />
-      <div className="bg-red-400 float-left w-[80%]">
+      <div className="float-left w-[80%] h-screen p-5">
         <Outlet />
       </div>
     </div>
