@@ -7,7 +7,7 @@ import {
   ContextMenuTrigger,
 } from "@/components/ui/context-menu";
 import { CardStackIcon } from "@radix-ui/react-icons";
-import { courses } from "../../../lib/consts";
+import {COURSES, courses} from "../../../lib/consts";
 import {
   setSelectedCourseId,
   setTab,
@@ -16,12 +16,12 @@ import { useDispatch, useSelector } from "react-redux";
 import { selectCurrentUser } from "../../../features/auth/authSlice";
 CourseCard.propTypes = {};
 
-function CourseCard({ courseId }) {
+function CourseCard({ courseId, name, img }) {
   const dispatch = useDispatch();
   const user = useSelector(selectCurrentUser);
 
   const handleCourseId = () => {
-    dispatch(setTab(courses));
+    dispatch(setTab(COURSES));
     dispatch(setSelectedCourseId(courseId));
   };
   return (
@@ -31,12 +31,11 @@ function CourseCard({ courseId }) {
           onClick={handleCourseId}
           className="rounded-xl h-40 drop-shadow-xl bg-cover bg-center border-none hover:drop-shadow-none cursor-pointer	 "
           style={{
-            backgroundImage:
-              "url('https://images.pexels.com/photos/128234/pexels-photo-128234.jpeg?cs=srgb&dl=pexels-etha-128234.jpg&fm=jpg')",
+            backgroundImage: `url(${img})`,
           }}
         >
           <CardHeader>
-            <CardTitle>CS101</CardTitle>
+            <CardTitle>{name}</CardTitle>
           </CardHeader>
         </Card>
       </ContextMenuTrigger>

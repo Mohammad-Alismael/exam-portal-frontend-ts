@@ -27,12 +27,21 @@ import {
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { setSelectedCourseId, setTab } from "./sidebarSlice";
-import { courses, PROFILE, SETTINGS } from "../../lib/consts";
+import { COURSES, courses, PROFILE, SETTINGS } from "../../lib/consts";
+import { useGetCoursesQuery } from "../courses/coursesApiSlice";
+import { Course } from "../../types/global";
 
 export function SidebarWithSearch() {
   const [open, setOpen] = React.useState(0);
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const {
+    data: courses,
+    isLoading,
+    isSuccess,
+    isError,
+    error,
+  } = useGetCoursesQuery();
 
   const handleOpen = (value) => {
     setOpen(open === value ? 0 : value);
@@ -41,7 +50,7 @@ export function SidebarWithSearch() {
     dispatch(setTab(tab));
   };
   const handleCourseId = (courseId: string) => {
-    handleDispatch(courses);
+    handleDispatch(COURSES);
     dispatch(setSelectedCourseId(courseId));
   };
 
@@ -91,28 +100,20 @@ export function SidebarWithSearch() {
           </ListItem>
           <AccordionBody className="py-1">
             <List className="p-0">
-              <ListItem
-                onClick={() => {
-                  handleCourseId("qw234e");
-                }}
-              >
-                <ListItemPrefix>
-                  <ChevronRightIcon strokeWidth={3} className="h-3 w-5" />
-                </ListItemPrefix>
-                CS101
-              </ListItem>
-              <ListItem onClick={() => handleCourseId("df45r")}>
-                <ListItemPrefix>
-                  <ChevronRightIcon strokeWidth={3} className="h-3 w-5" />
-                </ListItemPrefix>
-                CS102
-              </ListItem>
-              <ListItem onClick={() => handleCourseId("sg45f6")}>
-                <ListItemPrefix>
-                  <ChevronRightIcon strokeWidth={3} className="h-3 w-5" />
-                </ListItemPrefix>
-                CS240
-              </ListItem>
+              {courses["data"].map((course: Course, i: number) => {
+                return (
+                  <ListItem
+                    onClick={() => {
+                      handleCourseId(course.classroom_id);
+                    }}
+                  >
+                    <ListItemPrefix>
+                      <ChevronRightIcon strokeWidth={3} className="h-3 w-5" />
+                    </ListItemPrefix>
+                    {course.class_name}
+                  </ListItem>
+                );
+              })}
             </List>
           </AccordionBody>
         </Accordion>

@@ -1,5 +1,6 @@
 import { useGetCoursesQuery } from "./coursesApiSlice";
 import { Link } from "react-router-dom";
+import {Course} from "../../types/global";
 
 const CoursesList = () => {
   const {
@@ -18,7 +19,7 @@ const CoursesList = () => {
       <section className="users">
         <h1>Users List</h1>
         <ul>
-          {courses['data'].map((course: any, i: any) => {
+          {courses['data'].map((course: Course, i: number) => {
             return <li key={i}>{course?.class_name}</li>;
           })}
         </ul>

@@ -9,9 +9,11 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import { persistStore } from "redux-persist";
 import { PersistGate } from "redux-persist/integration/react";
+import {coursesApiSlice} from "./features/courses/coursesApiSlice";
 let persist = persistStore(store);
+
+// store.dispatch(coursesApiSlice.endpoints.getCourses.initiate())
 store.dispatch((_)=> {
-    // eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxLCJ1c2VybmFtZSI6ImFkbWluIiwicm9sZV9pZCI6IjMiLCJpYXQiOjE2OTIwMjg2MTgsImV4cCI6MTY5MjAyOTUxOH0.0SepYurL9Vcp7_WlY_F94zGTBMiHDpuNc9x1RKe8-vI
     console.log('dam! this is from main.tsx', store.getState().auth)
 })
 ReactDOM.createRoot(document.getElementById("root")!).render(

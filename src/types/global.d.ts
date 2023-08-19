@@ -12,7 +12,13 @@ declare global {
     }
 
     type Course = {
-        name: string;
-        age: number;
+       id: string,
+        classroom_id: string,
+        instructor_info: {username: string, email: string}
+        class_name: string,
+        section: string,
+        allow_students_to_announcements: number,
+        allow_students_to_comment: number,
+        img_path: string
     };
 }
