@@ -13,7 +13,20 @@ export const coursesApiSlice = apiSlice.injectEndpoints({
       }),
       providesTags: (results, error, arg) => [
         { type: "Course", id: "LIST" },
-        ...results.data.map((course: Course) => ({ type: "Course", id:course.id })),
+        ...results.data.map((course: Course) => ({
+          type: "Course",
+          id: course.id,
+        })),
+      ],
+      keepUnusedDataFor: 5,
+    }),
+    getCoursesByClassroomId: builder.query({
+      query: (classroomId) => ({
+        url: `/classrooms/${classroomId}`,
+        method: "GET",
+      }),
+      providesTags: (results, error, arg) => [
+        { type: "Course", id: results.data.course_info.id },
       ],
       keepUnusedDataFor: 5,
     }),
@@ -32,13 +45,14 @@ export const coursesApiSlice = apiSlice.injectEndpoints({
         body: courseId,
       }),
       invalidatesTags: (results, error, arg) => [
-        { type: "Course", id: arg.id }
+        { type: "Course", id: arg.id },
       ],
     }),
   }),
 });
 export const {
   useGetCoursesQuery,
+  useGetCoursesByClassroomIdQuery,
   useAddCourseMutation,
   useUpdateCourseMutation,
 } = coursesApiSlice;

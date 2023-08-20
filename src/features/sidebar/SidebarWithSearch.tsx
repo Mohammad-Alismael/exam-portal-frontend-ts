@@ -100,9 +100,10 @@ export function SidebarWithSearch() {
           </ListItem>
           <AccordionBody className="py-1">
             <List className="p-0">
-              {courses["data"].map((course: Course, i: number) => {
+              {!isLoading && courses["data"].map((course: Course, i: number) => {
                 return (
                   <ListItem
+                      key={course.id}
                     onClick={() => {
                       handleCourseId(course.classroom_id);
                     }}
