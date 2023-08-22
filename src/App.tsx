@@ -63,6 +63,7 @@ function App() {
           }
         />
         <Route path="activation/:emailToken" element={<EmailActivation />} />
+        <Route path="invitation/:invitationToken" element={<EmailActivation />} />
         <Route path="logout" element={<Logout />} />
 
         {/* protected routes */}

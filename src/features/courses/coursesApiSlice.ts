@@ -1,15 +1,17 @@
 import { apiSlice } from "../../app/api/apiSlice";
 import { createSelector } from "@reduxjs/toolkit";
 // transformFormResponse
-const initialState = {
-  courses: [],
-};
+
 export const coursesApiSlice = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
     getCourses: builder.query({
       query: () => ({
         url: "/classrooms",
         method: "GET",
+        transformResponse : (response, meta, arg) => {
+          console.log('response', response)
+          return response
+        }
       }),
       providesTags: (results, error, arg) => [
         { type: "Course", id: "LIST" },

@@ -22,7 +22,8 @@ import Announcement from "../announcements/Announcement";
 import { toast } from "react-toastify";
 import Participants from "../../components/custom-ui/Participants";
 import { MagnifyingGlassIcon } from "@heroicons/react/24/outline";
-import ExamCardInstructor from "../../components/custom-ui/cards/ExamCardInstructor";
+import ExamCard from "../../components/custom-ui/cards/ExamCard";
+import {selectCurrentUser} from "../auth/authSlice";
 
 function SingleCourse(props) {
   const courseId = useSelector(selectCourseId);
@@ -33,6 +34,8 @@ function SingleCourse(props) {
     isError,
     error,
   } = useGetCoursesByClassroomIdQuery(courseId);
+  const user = useSelector(selectCurrentUser);
+
   toast.error(error);
   if (isLoading) {
     return <LoadingSpinner />;
@@ -85,39 +88,36 @@ function SingleCourse(props) {
           <div className="flex justify-between py-2 px-1 text-md capitalize">
             <span>exam name</span>
             <span>creation date</span>
-            <span>due date</span>
-            <span>actions</span>
+            <span>{user.role_id === "3" ? 'due date': 'status'}</span>
+            <span>{user.role_id === "3" ? 'actions' : 'submitted at'}</span>
           </div>
           <div className="space-y-2.5">
-            <ExamCardInstructor />
-            <ExamCardInstructor />
-            <ExamCardInstructor />
-            <ExamCardInstructor />
-            <ExamCardInstructor />
+            <ExamCard />
+            <ExamCard />
+            <ExamCard />
+            <ExamCard />
+            <ExamCard />
           </div>
         </TabsContent>
-        <TabsContent className="" value="people">
+        <TabsContent value="people">
           <div className="flex justify-between items-center py-5">
             <h1 className="text-white text-2xl font-semibold  m-0 capitalize">
               classmates
             </h1>
-            <div className=" bg-white text-black">
+            <div className="bg-white text-black">
               <Input
+                className="bg-white text-black"
                 icon={<MagnifyingGlassIcon className="h-5 w-5 text-black" />}
                 label="Search"
               />
             </div>
           </div>
 
-          <Card className="rounded bg-white flex-col">
+          <Card className="border-none rounded space-y-2.5">
             <Participants />
-            <hr className="my-1 border-blue-gray-50" />
             <Participants />
-            <hr className="my-1 border-blue-gray-50" />
             <Participants />
-            <hr className="my-1 border-blue-gray-50" />
             <Participants />
-            <hr className="my-1 border-blue-gray-50" />
           </Card>
         </TabsContent>
       </Tabs>
