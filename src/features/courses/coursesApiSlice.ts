@@ -8,10 +8,10 @@ export const coursesApiSlice = apiSlice.injectEndpoints({
       query: () => ({
         url: "/classrooms",
         method: "GET",
-        transformResponse : (response, meta, arg) => {
-          console.log('response', response)
-          return response
-        }
+        transformResponse: (response, meta, arg) => {
+          console.log("response", response);
+          return response;
+        },
       }),
       providesTags: (results, error, arg) => [
         { type: "Course", id: "LIST" },
@@ -50,6 +50,28 @@ export const coursesApiSlice = apiSlice.injectEndpoints({
         { type: "Course", id: arg.id },
       ],
     }),
+    generateInvitationLink: builder.mutation({
+      query: ({ courseId }) => ({
+        url: "/classrooms/generate-invitation-link",
+        method: "GET",
+        body: courseId,
+      }),
+    }),
+    enrolToClassroom: builder.mutation({
+      query: (body) => ({
+        url: "/classrooms/enroll",
+        method: "POST",
+        body: body,
+      }),
+    }),
+    verifyInvitationLink: builder.query({
+      query: (body) => ({
+        url: "/classrooms/verify-invitation-link",
+        method: "POST",
+        body, // client_id
+      }),
+      transformResponse: (response: { data }, meta, arg) => response.data,
+    }),
   }),
 });
 export const {
@@ -57,6 +79,9 @@ export const {
   useGetCoursesByClassroomIdQuery,
   useAddCourseMutation,
   useUpdateCourseMutation,
+  useGenerateInvitationLinkMutation,
+  useEnrolToClassroomMutation,
+  useVerifyInvitationLinkQuery,
 } = coursesApiSlice;
 
 // export const selectCourseResult = coursesApiSlice.endpoints.getCourses.select(

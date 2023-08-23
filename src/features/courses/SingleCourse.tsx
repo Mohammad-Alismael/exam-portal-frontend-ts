@@ -24,6 +24,7 @@ import Participants from "../../components/custom-ui/Participants";
 import { MagnifyingGlassIcon } from "@heroicons/react/24/outline";
 import ExamCard from "../../components/custom-ui/cards/ExamCard";
 import {selectCurrentUser} from "../auth/authSlice";
+import {Avatar, AvatarFallback, AvatarImage} from "../../components/ui/avatar";
 
 function SingleCourse(props) {
   const courseId = useSelector(selectCourseId);
@@ -67,6 +68,13 @@ function SingleCourse(props) {
               <CardHeader>
                 <CardTitle>{class_name}</CardTitle>
               </CardHeader>
+              <div className="inline-flex items-center gap-x-2 px-6 absolute bottom-6">
+                <Avatar>
+                  <AvatarImage src="https://github.com/shadcn.png" />
+                  <AvatarFallback className="bg-yellow-600">CN</AvatarFallback>
+                </Avatar>
+                <span>username</span>
+              </div>
             </Card>
             <div className="px-24 space-y-3">
               <Announcement />

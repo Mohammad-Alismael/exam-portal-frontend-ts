@@ -18,6 +18,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "../../ui/avatar";
 CourseCard.propTypes = {};
 
 function CourseCard({ data }) {
+  console.log(data)
   const { class_name, classroom_id, img_path, section, instructor_info } = data;
   const {email,username } = instructor_info
   const dispatch = useDispatch();

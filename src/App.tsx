@@ -15,6 +15,7 @@ import { selectCurrentToken } from "./features/auth/authSlice";
 import PersistLogin from "./features/auth/PersistLogin";
 import EmailActivation from "./components/custom-ui/EmailActivation";
 import Logout from "./components/custom-ui/Logout";
+import InvitationUrl from "./components/custom-ui/InvitationUrl";
 function App() {
   const token = useSelector(selectCurrentToken) as string;
 
@@ -63,12 +64,16 @@ function App() {
           }
         />
         <Route path="activation/:emailToken" element={<EmailActivation />} />
-        <Route path="invitation/:invitationToken" element={<EmailActivation />} />
+
         <Route path="logout" element={<Logout />} />
 
         {/* protected routes */}
         <Route element={<PersistLogin />}>
           <Route element={<RequireAuth />}>
+            <Route
+              path="invitation/:invitationToken"
+              element={<InvitationUrl />}
+            />
             <Route path="/dashboard" element={<Layout2 />}>
               <Route index element={<Dashboard />} />
               <Route path="courses" element={<CoursesList />} />
