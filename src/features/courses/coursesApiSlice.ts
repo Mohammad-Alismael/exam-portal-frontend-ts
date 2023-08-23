@@ -53,7 +53,7 @@ export const coursesApiSlice = apiSlice.injectEndpoints({
     generateInvitationLink: builder.mutation({
       query: ({ courseId }) => ({
         url: "/classrooms/generate-invitation-link",
-        method: "GET",
+        method: "POST",
         body: courseId,
       }),
     }),

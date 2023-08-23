@@ -12,13 +12,23 @@ import {
   ChartBarSquareIcon,
   PencilSquareIcon,
 } from "@heroicons/react/24/outline";
+import {COURSES, EXAM_PAGE} from "../../../lib/consts";
+import {setSelectedCourseId, setTab} from "../../../features/sidebar/sidebarSlice";
+import {useNavigate} from "react-router-dom";
+import {useDispatch} from "react-redux";
 ExamCard.propTypes = {};
 
 function ExamCard(props) {
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const handleExamId = () => {
+    dispatch(setTab(EXAM_PAGE));
+    // dispatch(setSelectedCourseId(courseId));
+  };
   return (
     <TooltipProvider>
       <Tooltip>
-        <div className="flex items-center p-2 bg-white text-black rounded flex justify-between  capitalize">
+        <div onClick={handleExamId} className="flex items-center p-2 bg-white text-black rounded flex justify-between  capitalize">
           <div className="inline-flex gap-x-2 items-center">
             <DocumentChartBarIcon className="text-yellow-600 mx-auto h-8 w-8 transition-transform" />
             <span>exam title</span>

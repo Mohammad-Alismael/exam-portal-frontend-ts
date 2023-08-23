@@ -42,7 +42,7 @@ function SingleCourse(props) {
     return <LoadingSpinner />;
   }
   if (isSuccess) {
-    const { class_name, img_path } = course["data"]["course_info"];
+    const { class_name, img_path, section } = course["data"]["course_info"];
     window.document.title = class_name;
     return (
       <Tabs defaultValue="announcements" className="w-full">
@@ -67,7 +67,11 @@ function SingleCourse(props) {
             >
               <CardHeader>
                 <CardTitle>{class_name}</CardTitle>
+                <p className="text-slate-500">
+                  {section.toUpperCase()} section
+                </p>
               </CardHeader>
+              <Button type='link' className='border-yellow-600 text-yellow-600 float-right absolute top-6 right-6'>edit classroom</Button>
               <div className="inline-flex items-center gap-x-2 px-6 absolute bottom-6">
                 <Avatar>
                   <AvatarImage src="https://github.com/shadcn.png" />
