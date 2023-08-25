@@ -10,7 +10,7 @@ import {
   useLoginMutation,
   useResetPasswordMutation,
   useSignupMutation,
-} from "../../features/auth/authApiSlice";
+} from "../../features/auth/usersApiSlice";
 import { Button } from "../ui/button";
 import {
   Form,

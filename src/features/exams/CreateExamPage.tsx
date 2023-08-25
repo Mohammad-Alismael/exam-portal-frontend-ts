@@ -1,5 +1,5 @@
 import React from "react";
-import ExamDetailsHorizontalStepper from "../../components/custom-ui/ExamDetailsHorizontalStepper";
+import ExamDetailsHorizontalStepper from "./ExamDetailsHorizontalStepper";
 
 function CreateExamPage(props) {
   return (

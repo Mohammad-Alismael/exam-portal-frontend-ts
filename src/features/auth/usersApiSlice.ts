@@ -1,6 +1,6 @@
 import { apiSlice } from "../../app/api/apiSlice";
 
-export const authApiSlice = apiSlice.injectEndpoints({
+export const usersApiSlice = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
     login: builder.mutation({
       query: (credentials) => ({
@@ -36,6 +36,13 @@ export const authApiSlice = apiSlice.injectEndpoints({
         method: "POST",
       }),
     }),
+    exists: builder.mutation({
+      query: (body) => ({
+        url: "/users/exists",
+        method: "POST",
+        body,
+      }),
+    }),
     logout: builder.mutation({
       query: () => ({
         url: "/users/logout",
@@ -49,6 +56,28 @@ export const authApiSlice = apiSlice.injectEndpoints({
         body: { ...body },
       }),
     }),
+    getUserInfo: builder.query({
+      query: (username) => ({
+        url: `/users/${username}`,
+        method: "GET",
+        transformResponse: (response, meta, arg) => {
+          console.log("response", response);
+          return response;
+        },
+        invalidatesTags: [{ type: "User", id: "USER_INFO" }],
+      }),
+
+    }),
+    uploadImage: builder.mutation({
+      query: (imageData) => {
+        console.log('imageData', imageData)
+        return {
+          url: '/users/upload',
+          method: 'POST',
+          body: imageData,
+        };
+      },
+    }),
   }),
 });
 
@@ -60,4 +89,7 @@ export const {
   useResetPasswordMutation,
   useActivateEmailMutation,
   useLogoutMutation,
-} = authApiSlice;
+  useExistsMutation,
+  useGetUserInfoQuery,
+  useUploadImageMutation,
+} = usersApiSlice;

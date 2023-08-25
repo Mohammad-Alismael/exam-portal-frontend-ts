@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { useActivateEmailMutation } from "../../features/auth/authApiSlice";
+import { useActivateEmailMutation } from "../../features/auth/usersApiSlice";
 import LoadingSpinner from "./LoadingSpinner";
 import { toast } from "react-toastify";
 

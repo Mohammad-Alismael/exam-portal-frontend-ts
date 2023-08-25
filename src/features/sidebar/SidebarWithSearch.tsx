@@ -55,7 +55,7 @@ export function SidebarWithSearch() {
   };
 
   return (
-    <Card className="rounded-none float-left h-[calc(100vh)] text-black p-4 shadow-xl shadow-blue-gray-900/5">
+    <Card className="rounded-none float-left h-[calc(100vh)] w-1/5 text-black p-4 shadow-xl shadow-blue-gray-900/5">
       <div
         onClick={() => handleDispatch(null)}
         className="mb-2 flex items-center gap-4 p-4"
@@ -71,7 +71,7 @@ export function SidebarWithSearch() {
           label="Search"
         />
       </div>
-      <List>
+      <List className='w-full'>
         <Accordion
           open={open === 1}
           icon={

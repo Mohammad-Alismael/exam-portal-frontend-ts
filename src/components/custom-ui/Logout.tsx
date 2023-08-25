@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { useLogoutMutation } from "../../features/auth/authApiSlice";
+import { useLogoutMutation } from "../../features/auth/usersApiSlice";
 import { logOut, setCredentials } from "../../features/auth/authSlice";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";

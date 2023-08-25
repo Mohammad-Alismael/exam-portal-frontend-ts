@@ -2,7 +2,7 @@ import { Outlet } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { selectCurrentToken, setCredentials } from "./authSlice";
 import React, { useEffect, useState } from "react";
-import { useRefreshMutation } from "./authApiSlice";
+import { useRefreshMutation } from "./usersApiSlice";
 import { toast } from "react-toastify";
 import jwt_decode from "jwt-decode";
 import LoadingSpinner from "../../components/custom-ui/LoadingSpinner";

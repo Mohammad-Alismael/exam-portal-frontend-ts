@@ -1,6 +1,6 @@
 import {fireEvent, render} from "@testing-library/react";
 import AuthForm from "../components/custom-ui/AuthForm";
-import {useLoginMutation} from "../features/auth/authApiSlice";
+import {useLoginMutation} from "../features/auth/usersApiSlice";
 import {useDispatch} from "react-redux";
 import {BrowserRouter, useNavigate} from "react-router-dom";
 import {useForm} from "react-hook-form";
