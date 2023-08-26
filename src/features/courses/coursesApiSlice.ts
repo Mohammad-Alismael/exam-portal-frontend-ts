@@ -51,11 +51,15 @@ export const coursesApiSlice = apiSlice.injectEndpoints({
       ],
     }),
     generateInvitationLink: builder.mutation({
-      query: ({ courseId }) => ({
-        url: "/classrooms/generate-invitation-link",
-        method: "POST",
-        body: courseId,
-      }),
+      query: (classroom_id) => {
+        console.log("courseId", classroom_id);
+        return {
+          url: "/classrooms/generate-invitation-link",
+          method: "POST",
+          body: {courseId: classroom_id},
+        };
+      },
+      transformResponse: (response: { data }, meta, arg) => response.data,
     }),
     enrolToClassroom: builder.mutation({
       query: (body) => ({

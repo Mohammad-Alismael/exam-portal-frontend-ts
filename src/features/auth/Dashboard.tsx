@@ -71,7 +71,6 @@ const Dashboard = () => {
       if (isLoading) {
         return <LoadingSpinner />;
       } else {
-        console.log("course", courses["data"]);
         return (
           <TooltipProvider>
             <Tooltip>

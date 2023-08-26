@@ -60,7 +60,7 @@ function InvitationUrl(props) {
         </AlertDialogHeader>
         <CourseCard data={data} />
         <AlertDialogFooter className="text-black">
-          <AlertDialogCancel className="border-yellow-600 rounded">
+          <AlertDialogCancel onClick={()=> navigate("/dashboard", { replace: true })} className="border-yellow-600 rounded">
             Cancel
           </AlertDialogCancel>
           <AlertDialogAction

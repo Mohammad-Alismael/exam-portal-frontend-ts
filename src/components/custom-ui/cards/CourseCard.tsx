@@ -6,8 +6,7 @@ import {
   ContextMenuContent,
   ContextMenuTrigger,
 } from "@/components/ui/context-menu";
-import { CardStackIcon } from "@radix-ui/react-icons";
-import { COURSES, courses } from "../../../lib/consts";
+import { COURSES } from "../../../lib/consts";
 import {
   setSelectedCourseId,
   setTab,
@@ -15,25 +14,42 @@ import {
 import { useDispatch, useSelector } from "react-redux";
 import { selectCurrentUser } from "../../../features/auth/authSlice";
 import { Avatar, AvatarFallback, AvatarImage } from "../../ui/avatar";
-CourseCard.propTypes = {};
+import {useGenerateInvitationLinkMutation} from "../../../features/courses/coursesApiSlice";
+import useClipboard from "react-hook-clipboard";
+import {toast} from "react-toastify";
+
 
 function CourseCard({ data }) {
-  console.log(data)
   const { class_name, classroom_id, img_path, section, instructor_info } = data;
   const {email,username } = instructor_info
   const dispatch = useDispatch();
   const user = useSelector(selectCurrentUser);
+  const [clipboard, copyToClipboard] = useClipboard();
+
+  const [generateInvitationLink, {isLoading}] = useGenerateInvitationLinkMutation()
 
   const handleCourseId = () => {
     dispatch(setTab(COURSES));
     dispatch(setSelectedCourseId(classroom_id));
   };
+  const handleInvitationLink = () => {
+    generateInvitationLink(classroom_id).unwrap().then((data)=> {
+      console.log(data)
+      if (data['extended']){
+        toast.info("inactivation token has been extended");
+      }
+      copyToClipboard(
+          window.location.origin + "/invitation/" + data['clientId']
+      );
+      toast.info("copied to clipboard");
+    }).catch(console.log)
+  }
   return (
     <ContextMenu>
       <ContextMenuTrigger>
         <Card
           onClick={handleCourseId}
-          className="rounded-xl h-40 drop-shadow-xl bg-cover bg-center border-none hover:drop-shadow-none cursor-pointer"
+          className={`rounded-xl h-40 drop-shadow-xl bg-cover bg-center border-none hover:drop-shadow-none ${isLoading ? 'cursor-wait' : 'cursor-pointer'}`}
           style={{
             backgroundImage: `url(${img_path})`,
           }}
@@ -56,7 +72,7 @@ function CourseCard({ data }) {
       <ContextMenuContent className="w-64 text-black">
         {user.role_id === "3" && (
           <ContextMenuCheckboxItem
-            onClick={() => alert("copied")}
+            onClick={handleInvitationLink}
             className="capitalize"
           >
             copy invitation link

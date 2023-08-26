@@ -88,7 +88,7 @@ function UserPage(props) {
   console.log('user data' ,data);
   return (
     <div>
-      <h1 className="text-white text-2xl font-semibold pb-2 m-0 capitalize">
+      <h1 className="text-white text-2xl font-semibold pb-3 m-0 capitalize">
         your personal details
       </h1>
       <Tabs defaultValue="account" className="w-full">
@@ -103,6 +103,7 @@ function UserPage(props) {
         <TabsContent className="mt-5" value="account">
           <Card className="bg-white w-full">
             <CardHeader>
+              <p className='capitalize text-black font-bold text-xl pb-4'>Profile Details</p>
               <div className="inline-flex items-center gap-x-10 px-3">
                 {uploadImageLoading ? (
                   <Spinner className="h-20 w-20 text-gray-900/50" />
@@ -167,15 +168,15 @@ function UserPage(props) {
         </TabsContent>
         <TabsContent className="mt-5" value="security">
           <Card className="bg-white w-full">
-            <CardHeader></CardHeader>
+            <CardHeader className='capitalize text-black font-bold text-xl'>change password</CardHeader>
             <CardContent className="grid grid-cols-2 gap-1.5">
               <div className="">
-                <Label htmlFor="email">Username</Label>
-                <Input type="email" id="email" placeholder="username" />
+                <Label htmlFor="email">current password</Label>
+                <Input type="email" id="email" placeholder="current password" />
               </div>
               <div className="">
-                <Label htmlFor="email">Email</Label>
-                <Input type="email" id="email" placeholder="Email" />
+                <Label htmlFor="email">new password</Label>
+                <Input type="email" id="email" placeholder="new password" />
               </div>
             </CardContent>
             <CardFooter>
