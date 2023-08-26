@@ -62,7 +62,6 @@ function UserPage(props) {
   };
 
   const handleImageUpload = (file) => {
-    alert("clicked");
     if (file) {
       const formData = new FormData();
       formData.append("image", file);
@@ -72,7 +71,7 @@ function UserPage(props) {
           console.log(data);
           handleReset();
           dispatch(
-            apiSlice.util.invalidateTags([{ type: "User", id: "USER_INFO" }])
+            apiSlice.util.invalidateTags(["USER_INFO"])
           );
         })
         .catch(console.log);
@@ -85,7 +84,6 @@ function UserPage(props) {
   };
 
   if (isLoading) return <LoadingSpinner />;
-  console.log('user data' ,data);
   return (
     <div>
       <h1 className="text-white text-2xl font-semibold pb-3 m-0 capitalize">
@@ -110,17 +108,12 @@ function UserPage(props) {
                 ) : (
                   <Avatar className="h-20 w-20">
                     <AvatarImage
-                      // src={
-                      //   data.profile_url
-                      //     ? data?.profile_url
-                      //     : "https://github.com/shadcn.png"
-                      // }
                       src={
                         data.profile_url
                       }
                     />
                     <AvatarFallback className="bg-yellow-600">
-                      CN
+                      {user.username.slice(0,2).toUpperCase()}
                     </AvatarFallback>
                   </Avatar>
                 )}

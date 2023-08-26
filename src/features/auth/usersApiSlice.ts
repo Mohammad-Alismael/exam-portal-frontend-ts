@@ -57,26 +57,28 @@ export const usersApiSlice = apiSlice.injectEndpoints({
       }),
     }),
     getUserInfo: builder.query({
-      query: (username) => ({
-        url: `/users/${username}`,
-        method: "GET",
-        transformResponse: (response, meta, arg) => {
-          console.log("response", response);
-          return response;
-        },
-        invalidatesTags: [{ type: "User", id: "USER_INFO" }],
-      }),
-
+      query: (username) => {
+        return {
+          url: `/users/${username}`,
+          method: "GET",
+          transformResponse: (response, meta, arg) => {
+            console.log("response", response);
+            return response;
+          },
+        };
+      },
+      providesTags: ["USER_INFO"],
     }),
     uploadImage: builder.mutation({
       query: (imageData) => {
-        console.log('imageData', imageData)
+        console.log("imageData", imageData);
         return {
-          url: '/users/upload',
-          method: 'POST',
+          url: "/users/upload",
+          method: "POST",
           body: imageData,
         };
       },
+      invalidatesTags: ["USER_INFO"],
     }),
   }),
 });

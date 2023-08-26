@@ -34,6 +34,7 @@ const baseQueryWithReauth = async (args, api, extraOptions) => {
 };
 
 export const apiSlice = createApi({
+  tagTypes: ["USER_INFO", "Course"],
   baseQuery: baseQueryWithReauth,
   endpoints: (builder) => ({}),
 });
