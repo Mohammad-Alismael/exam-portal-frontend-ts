@@ -5,12 +5,13 @@ import useDebounce from "../../lib/hooks/useDebounce";
 import { cn } from "../../lib/utils";
 
 function InputWithDebounce({
+  val,
+  setValue,
   customHook,
   label,
   defaultValue = "",
   objectKey,
 }) {
-  const [val, setValue] = useState(defaultValue);
   const debouncedVal = useDebounce(val, 500);
 
   const [exists, { isLoading }] = customHook();

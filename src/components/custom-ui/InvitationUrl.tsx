@@ -12,7 +12,7 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
-import CourseCard from "./cards/CourseCard";
+import {CourseCard} from "./cards/CourseCard";
 import {
   useEnrolToClassroomMutation,
   useVerifyInvitationLinkQuery,

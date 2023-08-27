@@ -80,6 +80,25 @@ export const usersApiSlice = apiSlice.injectEndpoints({
       },
       invalidatesTags: ["USER_INFO"],
     }),
+    updateUserInfo: builder.mutation({
+      query: (body) => {
+        return {
+          url: "/users/update",
+          method: "PUT",
+          body,
+        };
+      },
+      invalidatesTags: ["USER_INFO"],
+    }),
+    updatePassword: builder.mutation({
+      query: (body) => {
+        return {
+          url: "/users/update/password",
+          method: "PUT",
+          body,
+        };
+      },
+    }),
   }),
 });
 
@@ -94,4 +113,6 @@ export const {
   useExistsMutation,
   useGetUserInfoQuery,
   useUploadImageMutation,
+  useUpdateUserInfoMutation,
+  useUpdatePasswordMutation,
 } = usersApiSlice;

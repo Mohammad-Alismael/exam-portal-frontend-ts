@@ -16,15 +16,21 @@ import {
   useExistsMutation,
   useGetUserInfoQuery,
   usersApiSlice,
+  useUpdatePasswordMutation,
+  useUpdateUserInfoMutation,
   useUploadImageMutation,
 } from "./usersApiSlice";
 import InputWithDebounce from "../../components/custom-ui/InputWithDebounce";
 import LoadingSpinner from "../../components/custom-ui/LoadingSpinner";
 import { apiSlice } from "../../app/api/apiSlice";
+import { toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
+import { ReloadIcon } from "@radix-ui/react-icons";
 
 function UserPage(props) {
   const user = useSelector(selectCurrentUser);
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const { data, isLoading, isSuccess, isError, error } = useGetUserInfoQuery(
     user?.username
   );
@@ -32,7 +38,16 @@ function UserPage(props) {
     uploadImage,
     { isLoading: uploadImageLoading, isError: uploadImageError },
   ] = useUploadImageMutation();
+  const [updateUserInfo, { isLoading: isLoadingUpdateUserInfo }] =
+    useUpdateUserInfoMutation();
+  const [updatePassword, { isLoading: isLoadingUpdatePw }] =
+    useUpdatePasswordMutation();
   const [selectedFile, setSelectedFile] = useState(null);
+  const [username, setUsername] = useState(data?.username);
+  const [email, setEmail] = useState(data?.email_id);
+  const [password, setPassword] = useState("");
+  const [newPassword, setNewPassword] = useState("");
+
   const [selectedFileName, setSelectedFileName] = useState("No file selected");
   const allowedFileTypes = ["image/jpeg", "image/gif", "image/png"];
   const maxFileSize = 2 * 1024 * 1024; // 2MB in bytes
@@ -70,12 +85,32 @@ function UserPage(props) {
         .then((data) => {
           console.log(data);
           handleReset();
-          dispatch(
-            apiSlice.util.invalidateTags(["USER_INFO"])
-          );
+          dispatch(apiSlice.util.invalidateTags(["USER_INFO"]));
         })
         .catch(console.log);
     }
+  };
+
+  const handleUpdateUserInfo = () => {
+    updateUserInfo({ username, email_id: email })
+      .unwrap()
+      .then((data) => {
+        toast.info(data["message"]);
+        data["message"] === "updated successfully!" && navigate("/login");
+      });
+  };
+
+  const handleUpdatePassword = () => {
+    updatePassword({ current_password: password, new_password: newPassword })
+      .unwrap()
+      .then((data) => {
+        toast.info(data["message"]);
+        data["data"]["message"] === "updated successfully!" && navigate("/login");
+      })
+      .catch((data) => {
+        console.log(data);
+        toast.info(data["data"]["message"]);
+      });
   };
 
   const handleReset = () => {
@@ -84,6 +119,7 @@ function UserPage(props) {
   };
 
   if (isLoading) return <LoadingSpinner />;
+  console.log(data);
   return (
     <div>
       <h1 className="text-white text-2xl font-semibold pb-3 m-0 capitalize">
@@ -101,19 +137,17 @@ function UserPage(props) {
         <TabsContent className="mt-5" value="account">
           <Card className="bg-white w-full">
             <CardHeader>
-              <p className='capitalize text-black font-bold text-xl pb-4'>Profile Details</p>
+              <p className="capitalize text-black font-bold text-xl pb-4">
+                Profile Details
+              </p>
               <div className="inline-flex items-center gap-x-10 px-3">
                 {uploadImageLoading ? (
                   <Spinner className="h-20 w-20 text-gray-900/50" />
                 ) : (
                   <Avatar className="h-20 w-20">
-                    <AvatarImage
-                      src={
-                        data.profile_url
-                      }
-                    />
+                    <AvatarImage src={data.profile_url} />
                     <AvatarFallback className="bg-yellow-600">
-                      {user.username.slice(0,2).toUpperCase()}
+                      {user.username.slice(0, 2).toUpperCase()}
                     </AvatarFallback>
                   </Avatar>
                 )}
@@ -140,12 +174,16 @@ function UserPage(props) {
             </CardHeader>
             <CardContent className="grid grid-cols-2 gap-1.5">
               <InputWithDebounce
+                val={username}
+                setValue={setUsername}
                 customHook={useExistsMutation}
                 label="username"
                 defaultValue={user?.username}
                 objectKey="username"
               />
               <InputWithDebounce
+                val={email}
+                setValue={setEmail}
                 customHook={useExistsMutation}
                 label="email"
                 defaultValue={data?.email_id}
@@ -153,28 +191,56 @@ function UserPage(props) {
               />
             </CardContent>
             <CardFooter>
-              <Button className="bg-yellow-600 rounded text-black">
-                save changes
+              <Button
+                className="bg-yellow-600 rounded text-black"
+                onClick={handleUpdateUserInfo}
+                disabled={isLoadingUpdateUserInfo}
+              >
+                {isLoadingUpdateUserInfo ? (
+                  <ReloadIcon className="mr-2 h-4 w-4 animate-spin" />
+                ) : (
+                  "save changes"
+                )}
               </Button>
             </CardFooter>
           </Card>
         </TabsContent>
         <TabsContent className="mt-5" value="security">
           <Card className="bg-white w-full">
-            <CardHeader className='capitalize text-black font-bold text-xl'>change password</CardHeader>
+            <CardHeader className="capitalize text-black font-bold text-xl">
+              change password
+            </CardHeader>
             <CardContent className="grid grid-cols-2 gap-1.5">
               <div className="">
-                <Label htmlFor="email">current password</Label>
-                <Input type="email" id="email" placeholder="current password" />
+                <Label htmlFor="current_password">current password</Label>
+                <Input
+                  type="password"
+                  id="current_password"
+                  placeholder="current password"
+                  onChange={(e) => setPassword(e.target.value)}
+                />
               </div>
               <div className="">
-                <Label htmlFor="email">new password</Label>
-                <Input type="email" id="email" placeholder="new password" />
+                <Label htmlFor="new_password">new password</Label>
+                <Input
+                  type="password"
+                  id="new_password"
+                  placeholder="new password"
+                  onChange={(e) => setNewPassword(e.target.value)}
+                />
               </div>
             </CardContent>
             <CardFooter>
-              <Button className="bg-yellow-600 rounded text-black">
-                save changes
+              <Button
+                className="bg-yellow-600 rounded text-black"
+                onClick={handleUpdatePassword}
+                disabled={isLoadingUpdatePw}
+              >
+                {isLoadingUpdatePw ? (
+                    <ReloadIcon className="mr-2 h-4 w-4 animate-spin" />
+                ) : (
+                    "save changes"
+                )}
               </Button>
             </CardFooter>
           </Card>
