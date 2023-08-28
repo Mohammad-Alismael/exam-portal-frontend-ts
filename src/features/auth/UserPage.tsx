@@ -95,8 +95,11 @@ function UserPage(props) {
     updateUserInfo({ username, email_id: email })
       .unwrap()
       .then((data) => {
-        toast.info(data["message"]);
-        data["message"] === "updated successfully!" && navigate("/login");
+        toast.info(data["message"]["username"]);
+        toast.info(data["message"]["email"]);
+        (data["message"]["email"] === "email address updated successfully" ||
+          data["message"]["username"] === "username updated successfully") &&
+          navigate("/login");
       });
   };
 
@@ -105,7 +108,8 @@ function UserPage(props) {
       .unwrap()
       .then((data) => {
         toast.info(data["message"]);
-        data["data"]["message"] === "updated successfully!" && navigate("/login");
+        data["message"] === "updated successfully!" &&
+          navigate("/login");
       })
       .catch((data) => {
         console.log(data);
@@ -237,9 +241,9 @@ function UserPage(props) {
                 disabled={isLoadingUpdatePw}
               >
                 {isLoadingUpdatePw ? (
-                    <ReloadIcon className="mr-2 h-4 w-4 animate-spin" />
+                  <ReloadIcon className="mr-2 h-4 w-4 animate-spin" />
                 ) : (
-                    "save changes"
+                  "save changes"
                 )}
               </Button>
             </CardFooter>

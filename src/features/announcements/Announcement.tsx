@@ -1,9 +1,12 @@
-import React, {useState} from "react";
+import React, { forwardRef, useState } from "react";
 import { Button } from "../../components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { TransitionGroup, CSSTransition } from "react-transition-group";
-import './Announcement.css';
-function Announcement(props) {
+import "./Announcement.css";
+import { Course } from "../../types/global";
+import { Skeleton } from "../../components/ui/skeleton";
+
+const Announcement = forwardRef(({ data }: Course, ref) => {
   const [showComments, setShowComments] = useState(false);
 
   const toggleComments = () => {
@@ -56,6 +59,27 @@ function Announcement(props) {
       </div>
     </div>
   );
-}
-
-export default Announcement;
+});
+Announcement.displayName = "Announcement";
+const AnnouncementSkeleton = forwardRef(({}, ref) => {
+  return (
+    <div className="bg-white text-black px-4 pt-3 pb-1 rounded">
+      <div className="inline-flex w-full gap-x-2 items-start">
+        <div className="inline-flex w-full gap-x-2 items-start">
+          <Skeleton className="h-12 w-12 rounded-full  bg-gray-300" />
+          <div className="inline-flex flex-col">
+            <Skeleton className="h-4 w-[70px] bg-gray-300" />
+            <Skeleton className="h-4 w-[40px] bg-gray-300" />
+          </div>
+        </div>
+      </div>
+      <Skeleton className="h-4 w-[250px] bg-gray-300" />
+      <hr className="my-2 border-blue-gray-50" />
+      <div>
+        <Skeleton className="h-4 w-[70px] bg-gray-300" />
+      </div>
+    </div>
+  );
+});
+AnnouncementSkeleton.displayName = "AnnouncementSkeleton";
+export { Announcement, AnnouncementSkeleton };

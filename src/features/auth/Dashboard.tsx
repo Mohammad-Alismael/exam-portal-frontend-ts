@@ -23,7 +23,7 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 
-import React from "react";
+import React, { useState } from "react";
 import { Label } from "../../components/ui/label";
 import { Input } from "../../components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -49,6 +49,8 @@ const Dashboard = () => {
   const tab = useSelector(selectTab);
   const selectedCourseId = useSelector(selectCourseId);
   const form = useForm();
+  const [selectedImg, setSelectedImg] = useState(null);
+  const [openImgs, setOpenImgs] = useState(false);
   const {
     data: courses,
     isLoading,
@@ -84,10 +86,13 @@ const Dashboard = () => {
                     courses["data"].map((course: Course, i: number) => {
                       return <CourseCard key={course.id} data={course} />;
                     })}
-                  {isLoading && new Array(7).fill(null).map((_, i) => (
-                      <CourseCardSkeleton key={i} />
-                  ))}
-                  {!isLoading && !courses["data"].length && <p>you have no classrooms</p>}
+                  {isLoading &&
+                    new Array(7)
+                      .fill(null)
+                      .map((_, i) => <CourseCardSkeleton key={i} />)}
+                  {!isLoading && !courses["data"].length && (
+                    <p>you have no classrooms</p>
+                  )}
                 </div>
               </div>
               <Dialog>
@@ -114,7 +119,10 @@ const Dashboard = () => {
                   </DialogHeader>
                   <Form {...form}>
                     <form
-                      onSubmit={form.handleSubmit((e) => consoel.log(e))}
+                      onSubmit={form.handleSubmit((e) => {
+                        console.log(e);
+                        console.log(selectedImg);
+                      })}
                       className="w-full space-y-6"
                     >
                       <FormField
@@ -149,15 +157,14 @@ const Dashboard = () => {
                           </FormItem>
                         )}
                       />
-                      <Dialog>
-                        <DialogTrigger asChild>
-                          <Button
-                            variant="link"
-                            className="rounded w-full capitalize border-slate-400"
-                          >
-                            select background image
-                          </Button>
-                        </DialogTrigger>
+                      <Dialog open={openImgs}>
+                        <Button
+                          variant="link"
+                          className="rounded w-full capitalize border-slate-400"
+                          onClick={() => setOpenImgs(true)}
+                        >
+                          select background image
+                        </Button>
                         <DialogContent className="bg-white text-black">
                           <DialogHeader>
                             <DialogTitle>Background images</DialogTitle>
@@ -165,25 +172,23 @@ const Dashboard = () => {
                           <div className=" grid grid-cols-4 gap-2 md:gap-3 md:grid-cols-12">
                             {[1, 2, 3, 4, 5, 6, 7, 8, 9].map((val, index) => (
                               <div
-                                className="col-span-4 sm:col-span-4 md:col-span-4"
+                                className={`col-span-4 sm:col-span-4 md:col-span-4 ${val == selectedImg ? 'border-yellow-600' : 'border-none'}`}
                                 key={index}
                               >
                                 <img
-                                  onClick={selectImg}
-                                  className="w-full h-full"
+                                  onClick={() => {
+                                    setSelectedImg(val);
+                                    setOpenImgs(false);
+                                  }}
+                                  className={`w-full h-full`}
                                   src={`http://localhost:8080/default-backgrounds/ep_option${val}.png`}
                                   alt={index.toString()}
                                 />
                               </div>
                             ))}
                           </div>
-
-                          <DialogFooter>
-                            <Button type="submit">Save changes</Button>
-                          </DialogFooter>
                         </DialogContent>
                       </Dialog>
-
                       <div>
                         <h3 className="mb-4 text-lg font-medium">
                           Exam Settings
