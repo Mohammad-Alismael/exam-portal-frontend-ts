@@ -28,7 +28,7 @@ import { Course } from "../../../types/global";
 
 const CourseCard = forwardRef(({ data }: Course, ref) => {
   const { class_name, classroom_id, img_path, section, instructor_info } = data;
-  const { email, username } = instructor_info;
+  const { email, username,profile_url } = instructor_info;
   const dispatch = useDispatch();
   const user = useSelector(selectCurrentUser);
   const [clipboard, copyToClipboard] = useClipboard();
@@ -74,8 +74,8 @@ const CourseCard = forwardRef(({ data }: Course, ref) => {
           </CardHeader>
           <div className="inline-flex items-center gap-x-2 px-3 absolute bottom-3">
             <Avatar>
-              <AvatarImage src="https://github.com/shadcn.png" />
-              <AvatarFallback className="bg-yellow-600">CN</AvatarFallback>
+              <AvatarImage src={profile_url} />
+              <AvatarFallback className="bg-yellow-600">{username.slice(0, 2).toUpperCase()}</AvatarFallback>
             </Avatar>
             <span>{username}</span>
           </div>

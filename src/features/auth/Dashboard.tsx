@@ -3,7 +3,10 @@ import { selectCurrentUser, selectCurrentToken } from "./authSlice";
 import { selectCourseId, selectTab } from "../sidebar/sidebarSlice";
 import { COURSES, EXAM_PAGE, PROFILE, SETTINGS } from "../../lib/consts";
 import SingleCourse from "../courses/SingleCourse";
-import { useGetCoursesQuery } from "../courses/coursesApiSlice";
+import {
+  useAddCourseMutation,
+  useGetCoursesQuery,
+} from "../courses/coursesApiSlice";
 import { Course } from "../../types/global";
 import LoadingSpinner from "../../components/custom-ui/LoadingSpinner";
 import { PlusIcon } from "@heroicons/react/24/outline";
@@ -43,12 +46,29 @@ import {
   CourseCard,
   CourseCardSkeleton,
 } from "../../components/custom-ui/cards/CourseCard";
+import { ReloadIcon } from "@radix-ui/react-icons";
+import { toast } from "react-toastify";
+type FormValues = {
+  class_name: string;
+  section: string;
+  allow_students_to_announcements: boolean;
+  allow_students_to_comment: boolean;
+};
+
 const Dashboard = () => {
   const user = useSelector(selectCurrentUser);
   const token = useSelector(selectCurrentToken);
   const tab = useSelector(selectTab);
   const selectedCourseId = useSelector(selectCourseId);
-  const form = useForm();
+  const form = useForm<FormValues>({
+    defaultValues: {
+      class_name: "",
+      section: "",
+      allow_students_to_announcements: false,
+      allow_students_to_comment: false,
+    },
+    mode: "onChange",
+  });
   const [selectedImg, setSelectedImg] = useState(null);
   const [openImgs, setOpenImgs] = useState(false);
   const {
@@ -58,6 +78,8 @@ const Dashboard = () => {
     isError,
     error,
   } = useGetCoursesQuery();
+  const [addCourse, { isLoading: isLoadingCreateCourse }] =
+    useAddCourseMutation();
   const selectImg = () => {};
   switch (tab) {
     case SETTINGS:
@@ -86,6 +108,7 @@ const Dashboard = () => {
                     courses["data"].map((course: Course, i: number) => {
                       return <CourseCard key={course.id} data={course} />;
                     })}
+                  {!isLoading && console.log(courses["data"])}
                   {isLoading &&
                     new Array(7)
                       .fill(null)
@@ -119,9 +142,11 @@ const Dashboard = () => {
                   </DialogHeader>
                   <Form {...form}>
                     <form
-                      onSubmit={form.handleSubmit((e) => {
-                        console.log(e);
-                        console.log(selectedImg);
+                      onSubmit={form.handleSubmit((data: FormValues) => {
+                        addCourse({ ...data, selectedImg }).then((data)=> {
+                          toast.success(data['message'])
+                          form.reset()
+                        });
                       })}
                       className="w-full space-y-6"
                     >
@@ -158,13 +183,15 @@ const Dashboard = () => {
                         )}
                       />
                       <Dialog open={openImgs}>
-                        <Button
-                          variant="link"
-                          className="rounded w-full capitalize border-slate-400"
-                          onClick={() => setOpenImgs(true)}
-                        >
-                          select background image
-                        </Button>
+                        <DialogTrigger asChild>
+                          <Button
+                            variant="link"
+                            className="rounded w-full capitalize border-slate-400"
+                            onClick={() => setOpenImgs(true)}
+                          >
+                            select background image
+                          </Button>
+                        </DialogTrigger>
                         <DialogContent className="bg-white text-black">
                           <DialogHeader>
                             <DialogTitle>Background images</DialogTitle>
@@ -172,7 +199,11 @@ const Dashboard = () => {
                           <div className=" grid grid-cols-4 gap-2 md:gap-3 md:grid-cols-12">
                             {[1, 2, 3, 4, 5, 6, 7, 8, 9].map((val, index) => (
                               <div
-                                className={`col-span-4 sm:col-span-4 md:col-span-4 ${val == selectedImg ? 'border-yellow-600' : 'border-none'}`}
+                                className={`col-span-4 sm:col-span-4 md:col-span-4 ${
+                                  val == selectedImg
+                                    ? "border-yellow-600"
+                                    : "border-none"
+                                }`}
                                 key={index}
                               >
                                 <img
@@ -196,7 +227,7 @@ const Dashboard = () => {
                         <div className="space-y-4">
                           <FormField
                             control={form.control}
-                            name="allow_announcements"
+                            name="allow_students_to_announcements"
                             render={({ field }) => (
                               <FormItem className="flex flex-row items-center justify-between rounded-lg border p-3 shadow-sm">
                                 <div className="space-y-0.5">
@@ -219,7 +250,7 @@ const Dashboard = () => {
                           />
                           <FormField
                             control={form.control}
-                            name="allow_comments"
+                            name="allow_students_to_comment"
                             render={({ field }) => (
                               <FormItem className="flex flex-row items-center justify-between rounded-lg border p-3 shadow-sm">
                                 <div className="space-y-0.5">
@@ -245,8 +276,13 @@ const Dashboard = () => {
                       <Button
                         type="submit"
                         className="bg-yellow-600 rounded float-right"
+                        disabled={isLoadingCreateCourse}
                       >
-                        Submit
+                        {isLoadingCreateCourse ? (
+                          <ReloadIcon className="mr-2 h-4 w-4 animate-spin" />
+                        ) : (
+                          "Submit"
+                        )}
                       </Button>
                     </form>
                   </Form>

@@ -33,11 +33,14 @@ export const coursesApiSlice = apiSlice.injectEndpoints({
       keepUnusedDataFor: 5,
     }),
     addCourse: builder.mutation({
-      query: (course) => ({
-        url: "/classrooms",
-        method: "POST",
-        body: course,
-      }),
+      query: (course) => {
+        console.log('course',course)
+        return {
+          url: "/classrooms/v2",
+          method: "POST",
+          body: course,
+        }
+      },
       invalidatesTags: [{ type: "Course", id: "LIST" }],
     }),
     updateCourse: builder.mutation({

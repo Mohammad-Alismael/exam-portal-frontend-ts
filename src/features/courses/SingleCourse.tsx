@@ -48,24 +48,16 @@ function SingleCourse(props) {
   } = useGetCoursesByClassroomIdQuery(courseId);
   const user = useSelector(selectCurrentUser);
   const dispatch = useDispatch();
-
-  const handleCourseId = (classroom_id) => {
-    console.log(classroom_id);
-    dispatch(setTab(""));
-    dispatch(setSelectedCourseId(""));
-  };
-
-  toast.error(error);
   if (isLoading) {
     return <SingleCourseSkeleton />;
   }
   if (isSuccess) {
     const { class_name, img_path, section, classroom_id } =
       course["data"]["course_info"];
+    const {username,profile_url} = course["data"]["course_info"]['instructor']
     window.document.title = class_name;
-    console.log(course["data"]);
     return (
-      <div>
+      <div className="">
         <Tabs defaultValue="announcements" className="w-full">
           <TabsList className="grid w-[400px] grid-cols-3 text-black">
             <TabsTrigger className="" value="announcements">
@@ -78,7 +70,7 @@ function SingleCourse(props) {
               people
             </TabsTrigger>
           </TabsList>
-          <TabsContent className="w-full h-screen" value="announcements">
+          <TabsContent className="w-full h-[90vh] overflow-y-auto" value="announcements">
             <Card
               className="mt-4 mb-5 rounded-xl h-60 drop-shadow-xl bg-cover bg-center border-none hover:drop-shadow-none cursor-pointer"
               style={{
@@ -101,13 +93,15 @@ function SingleCourse(props) {
               )}
               <div className="inline-flex items-center gap-x-2 px-6 absolute bottom-6">
                 <Avatar>
-                  <AvatarImage src="https://github.com/shadcn.png" />
+                  <AvatarImage src={profile_url} />
                   <AvatarFallback className="bg-yellow-600">CN</AvatarFallback>
                 </Avatar>
-                <span>username</span>
+                <span>{username}</span>
               </div>
             </Card>
             <div className="px-24 space-y-3">
+              <Announcement />
+              <Announcement />
               <Announcement />
               <Announcement />
               <Announcement />
